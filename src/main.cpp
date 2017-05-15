@@ -54,9 +54,14 @@ void sequence(T n, Sequences<T>& seq) {
 
 } // namespace collatz
 
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " N\n\twhere N is the number of points\n";
+        return -1;
+    }
+    int n = atoi(argv[1]);
     collatz::Sequences<int> seq;
-    for (int i = 1; i < 10; ++i) {
+    for (int i = 1; i < n; ++i) {
       collatz::sequence(i, seq);
     }
     seq.print_all();
