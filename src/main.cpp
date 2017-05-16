@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     int n = atoi(argv[1]);
-    collatz::Sequences<int> seq(n);
+    collatz::Sequences<int> seq(2*n);
     // I can easily prove that all even numbers will converge to 1.
     // Avoid wasting effort!
     for (int i = 1; i < n; i += 2) {
