@@ -27,7 +27,6 @@ class Sequences {
         }
         return true;
     }
-
    private:
     bool contains(T n) { return seen_before.find(n) != seen_before.end(); }
     std::unordered_set<T> seen_before;
@@ -52,11 +51,11 @@ int main(int argc, char *argv[]) {
                   << " N\n\twhere N is the number of points\n";
         return -1;
     }
-    int n = atoi(argv[1]);
-    collatz::Sequences<int> seq(2*n);
+    auto n = std::stoll(argv[1]);
+    collatz::Sequences<decltype(n)> seq(2*n);
     // I can easily prove that all even numbers will converge to 1.
     // Avoid wasting effort!
-    for (int i = 1; i < n; i += 2) {
+    for (decltype(n) i = 1; i < n; i += 2) {
         if (i % (n/100) == 1) { std::cout << 100 * (i - 1) / n + 1 << "%\r"; std::flush(std::cout); }
         collatz::sequence(i, seq);
     }
