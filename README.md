@@ -21,9 +21,7 @@ Usage
 Current performance
 -------------------
 
+Measuring the time to evaluate go throught the first ten million:
 ```
-time:
-./collatz 10000000 > ten_millions.txt  14.94s user 10.15s system 99% cpu 25.095 total
+./collatz 10000000  7.32s user 0.16s system 99% cpu 7.475 total
 ```
-
-Produces 189M of data
