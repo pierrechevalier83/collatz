@@ -20,8 +20,8 @@ class Sequences {
         return add(n);
     }
     bool add(T n) {
+        chains.back().push_back(n);
         if (!contains(n)) {
-            chains.back().push_back(n);
             which_chain[n] = chains.size() - 1;
             return n == 1;
         }
