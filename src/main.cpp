@@ -10,7 +10,8 @@ T next(T n) {
     if (n % 2 == 0) {
         return n / 2;
     }
-    return 3 * n + 1;
+    // 3 * n + 1 is even, so divide it by 2 directly
+    return (3 * n + 1) / 2;
 }
 
 template <typename T>
