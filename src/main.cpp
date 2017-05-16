@@ -17,9 +17,7 @@ T next(T n) {
 template <typename T>
 class Sequences {
    public:
-    Sequences(T n) {
-        seen_before.reserve(n);
-    }
+    Sequences(T n) { seen_before.reserve(n); }
     bool add(T n) {
         if (!contains(n)) {
             seen_before.insert(n);
@@ -27,6 +25,7 @@ class Sequences {
         }
         return true;
     }
+
    private:
     bool contains(T n) { return seen_before.find(n) != seen_before.end(); }
     std::unordered_set<T> seen_before;
@@ -38,13 +37,14 @@ void sequence(T n, Sequences<T> &seq) {
     bool done = seq.add(n);
     while (!done) {
         n = next(n);
-        // If n < start, no need to look in the hash_table, I know it converges to 1 as I went through it before
+        // If n < start, no need to look in the hash_table, I know it converges
+        // to 1 as I went through it before
         done = n < start || seq.add(n);
     }
 }
 
 template <typename T>
-void increment(T& i) {
+void increment(T &i) {
     // predicate: i is odd (even numbers are uninteresting)
     i += 2;
     // i is odd
@@ -54,7 +54,7 @@ void increment(T& i) {
         // i + 1 is even, so uninteresting
         // i + 2 is congruent to 4 mod 9, so uninteresting
         // i + 3 is congruent to 5 mod 9 and even, so extremely uninteresting
-        i +=4;
+        i += 4;
     }
     if (i % 9 == 8) {
         // i is uniniteresting;
@@ -77,9 +77,12 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     auto n = std::stoll(argv[1]);
-    collatz::Sequences<decltype(n)> seq(2*n);
+    collatz::Sequences<decltype(n)> seq(2 * n);
     for (decltype(n) i = 1; i < n; collatz::increment(i)) {
-        if (i % (n/100) == 1) { std::cout << 100 * (i - 1) / n + 1 << "%\r"; std::flush(std::cout); }
+        if (i % (n / 100) == 1) {
+            std::cout << 100 * (i - 1) / n + 1 << "%\r";
+            std::flush(std::cout);
+        }
         collatz::sequence(i, seq);
     }
     std::cout << std::endl;
