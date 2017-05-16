@@ -14,7 +14,7 @@ T next(T n) {
 
 template <typename T>
 class Sequences {
-public:
+   public:
     bool add_chain(T n) {
         chains.push_back({});
         return add(n);
@@ -28,23 +28,27 @@ public:
         return true;
     }
     void print_all() {
-        for (const auto& chain: chains) {
-            for (const auto& n: chain) {
-                std::cout << n << " ";
+        for (const auto &chain : chains) {
+            bool first = true;
+            for (const auto &n : chain) {
+                if (!first) {
+                    std::cout << ' ';
+                }
+                first = false;
+                std::cout << n;
             }
             std::cout << std::endl;
         }
     }
-private:
-    bool contains(T n) {
-        return which_chain.find(n) != which_chain.end();
-    }
+
+   private:
+    bool contains(T n) { return which_chain.find(n) != which_chain.end(); }
     std::unordered_map<T, T> which_chain;
     std::vector<std::vector<T>> chains;
 };
 
 template <typename T>
-void sequence(T n, Sequences<T>& seq) {
+void sequence(T n, Sequences<T> &seq) {
     bool done = seq.add_chain(n);
     while (!done) {
         n = next(n);
@@ -52,17 +56,18 @@ void sequence(T n, Sequences<T>& seq) {
     }
 }
 
-} // namespace collatz
+}  // namespace collatz
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " N\n\twhere N is the number of points\n";
+        std::cerr << "Usage: " << argv[0]
+                  << " N\n\twhere N is the number of points\n";
         return -1;
     }
     int n = atoi(argv[1]);
     collatz::Sequences<int> seq;
     for (int i = 1; i < n; ++i) {
-      collatz::sequence(i, seq);
+        collatz::sequence(i, seq);
     }
     seq.print_all();
 }
