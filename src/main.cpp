@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <iostream>
-#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace collatz {
@@ -18,7 +18,7 @@ class Sequences {
    public:
     Sequences(T n) {
         chains.reserve(n);
-        which_chain.reserve(n);
+        seen_before.reserve(n);
     }
     bool add_chain(T n) {
         chains.push_back({});
@@ -27,7 +27,7 @@ class Sequences {
     bool add(T n) {
         chains.back().push_back(n);
         if (!contains(n)) {
-            which_chain[n] = chains.size() - 1;
+            seen_before.insert(n);
             return n == 1;
         }
         return true;
@@ -47,17 +47,18 @@ class Sequences {
     }
 
    private:
-    bool contains(T n) { return which_chain.find(n) != which_chain.end(); }
-    std::unordered_map<T, T> which_chain;
+    bool contains(T n) { return seen_before.find(n) != seen_before.end(); }
+    std::unordered_set<T> seen_before;
     std::vector<std::vector<T>> chains;
 };
 
 template <typename T>
 void sequence(T n, Sequences<T> &seq) {
+    const T start = n;
     bool done = seq.add_chain(n);
     while (!done) {
         n = next(n);
-        done = seq.add(n);
+        done = n < start || seq.add(n);
     }
 }
 
