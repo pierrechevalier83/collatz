@@ -45,26 +45,64 @@ void sequence(T n, Sequences<T> &seq) {
 
 template <typename T>
 void increment(T &i) {
-    // predicate: i is odd (even numbers are uninteresting)
-    i += 2;
-    // i is odd
-    // we want to skip 2, 4, 5 and 8 modulo 9 as they are uninteresting
+    // predicates:
+    //  .  all smaller numbers coallesce to 1
+    //  a) i is congruent to 3 mod 4
+    //  b) i is congruent to 1, 3, 6, 7 or 9 modulo 9
+    //  c) i is congruent to 7 modulo 8
+    //  d) i is congruent to 7, 15 or 31 modulo 32
+    //
+    // a)
+    //   i must be odd
+    //   because if it was even,
+    //   2n -> n < 2n, so already visited
+    //
+    //   i must also be 3 % 4
+    //   because if it was 1 %4,
+    //   4n + 1 -> 12n + 4 -> 6n + 2 -> 3n + 1 < 4n + 1, so already visited
+    //
+    // b)
+    //   2 mod 9 has already been visited by smaller number:
+    //     6n + 1 -> 18n + 4 -> 9n + 2
+    //   4 mod 9 has already been visited by smaller number:
+    //     8n + 3 -> 24n + 10 -> 12n + 5 -> 36n + 16 -> 18n + 8 -> 9n + 4
+    //   5 mod 9 has already been visited by smaller number:
+    //     6n + 3 -> 18n + 10 -> 9n + 5
+    //   8 mod 9 has already been visited by smaller number:
+    //     6n + 5 -> 18n + 16 -> 9n + 8
+    //
+    // c)
+    //   given a, i can be 3 % 8 or 7 % 8
+    //   it must be 7 % 8
+    //   because if it was 3 % 8
+    //   8n + 3 -> 24n + 10 -> 12n + 5 -> 36n + 16 -> 18n + 8 -> 9n + 4 // already visited (see proof in b)
+    //
+    // d)
+    //   given c, i can be 7, 15, 23 or 31 modulo 32
+    //   but i can't be 23 modulo 32 because
+    //   32n + 23 -> 32n + 23 -> 96n + 70 -> 48n + 35 -> 144n + 106 -> 72n + 53 -> 216n + 160 -> 108n + 80 -> 54n + 40 -> 27n + 20 < 32n + 23, so already studied
+
+    i += 8;
+
     if (i % 9 == 2) {
-        // i is uniniteresting;
-        // i + 1 is even, so uninteresting
-        // i + 2 is congruent to 4 mod 9, so uninteresting
-        // i + 3 is congruent to 5 mod 9 and even, so extremely uninteresting
-        i += 4;
+        // let's move on to next 7 % 8
+        i += 8; // (we are now 1 % 9)
+    }
+    if (i % 9 == 4) {
+        i += 8; // (we are now 3 % 9)
+    }
+    if (i % 9 == 5) {
+        // i + 8 == 4 % 9, so uninteresting
+        i += 16; // (we are now 3 % 9)
     }
     if (i % 9 == 8) {
-        // i is uniniteresting;
-        // i + 1 is even, so uninteresting
-        i += 2;
+        // let's move on to next 3 % 4
+        // i + 4 == 2 % 9, so uninteresting
+         i += 8; // (we are now 7 % 9)
     }
-    if (i % 8 == 5) {
-        // i is uniniteresting;
-        // i + 1 is even, so uninteresting
-        i += 2;
+
+    if (i % 32 == 23) {
+         i += 8; // (we are now 31 % 32)
     }
 }
 
@@ -78,11 +116,9 @@ int main(int argc, char *argv[]) {
     }
     auto n = std::stoll(argv[1]);
     collatz::Sequences<decltype(n)> seq(2 * n);
-    for (decltype(n) i = 1; i < n; collatz::increment(i)) {
-        if (i % (n / 100) == 1) {
-            std::cout << 100 * (i - 1) / n + 1 << "%\r";
-            std::flush(std::cout);
-        }
+    for (decltype(n) i = 7; i < n; collatz::increment(i)) {
+        std::cout << 100 * (i - 1) / n + 1 << "%\r";
+        std::flush(std::cout);
         collatz::sequence(i, seq);
     }
     std::cout << std::endl;
