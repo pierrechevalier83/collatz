@@ -43,6 +43,31 @@ void sequence(T n, Sequences<T> &seq) {
     }
 }
 
+template <typename T>
+void increment(T& i) {
+    // predicate: i is odd (even numbers are uninteresting)
+    i += 2;
+    // i is odd
+    // we want to skip 2, 4, 5 and 8 modulo 9 as they are uninteresting
+    if (i % 9 == 2) {
+        // i is uniniteresting;
+        // i + 1 is even, so uninteresting
+        // i + 2 is congruent to 4 mod 9, so uninteresting
+        // i + 3 is congruent to 5 mod 9 and even, so extremely uninteresting
+        i +=4;
+    }
+    if (i % 9 == 8) {
+        // i is uniniteresting;
+        // i + 1 is even, so uninteresting
+        i += 2;
+    }
+    if (i % 8 == 5) {
+        // i is uniniteresting;
+        // i + 1 is even, so uninteresting
+        i += 2;
+    }
+}
+
 }  // namespace collatz
 
 int main(int argc, char *argv[]) {
@@ -53,9 +78,7 @@ int main(int argc, char *argv[]) {
     }
     auto n = std::stoll(argv[1]);
     collatz::Sequences<decltype(n)> seq(2*n);
-    // I can easily prove that all even numbers will converge to 1.
-    // Avoid wasting effort!
-    for (decltype(n) i = 1; i < n; i += 2) {
+    for (decltype(n) i = 1; i < n; collatz::increment(i)) {
         if (i % (n/100) == 1) { std::cout << 100 * (i - 1) / n + 1 << "%\r"; std::flush(std::cout); }
         collatz::sequence(i, seq);
     }
