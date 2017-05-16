@@ -18,45 +18,25 @@ template <typename T>
 class Sequences {
    public:
     Sequences(T n) {
-        chains.reserve(n);
         seen_before.reserve(n);
     }
-    bool add_chain(T n) {
-        chains.push_back({});
-        return add(n);
-    }
     bool add(T n) {
-        chains.back().push_back(n);
         if (!contains(n)) {
             seen_before.insert(n);
             return n == 1;
         }
         return true;
     }
-    void print_all() {
-        for (const auto &chain : chains) {
-            bool first = true;
-            for (const auto &n : chain) {
-                if (!first) {
-                    std::cout << ' ';
-                }
-                first = false;
-                std::cout << n;
-            }
-            std::cout << std::endl;
-        }
-    }
 
    private:
     bool contains(T n) { return seen_before.find(n) != seen_before.end(); }
     std::unordered_set<T> seen_before;
-    std::vector<std::vector<T>> chains;
 };
 
 template <typename T>
 void sequence(T n, Sequences<T> &seq) {
     const T start = n;
-    bool done = seq.add_chain(n);
+    bool done = seq.add(n);
     while (!done) {
         n = next(n);
         // If n < start, no need to look in the hash_table, I know it converges to 1 as I went through it before
@@ -77,7 +57,8 @@ int main(int argc, char *argv[]) {
     // I can easily prove that all even numbers will converge to 1.
     // Avoid wasting effort!
     for (int i = 1; i < n; i += 2) {
+        if (i % (n/100) == 1) { std::cout << 100 * (i - 1) / n + 1 << "%\r"; std::flush(std::cout); }
         collatz::sequence(i, seq);
     }
-    seq.print_all();
+    std::cout << std::endl;
 }
