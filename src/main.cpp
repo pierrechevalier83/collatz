@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <unordered_map>
 #include <vector>
@@ -15,6 +16,10 @@ T next(T n) {
 template <typename T>
 class Sequences {
    public:
+    Sequences(T n) {
+        chains.reserve(n);
+        which_chain.reserve(n);
+    }
     bool add_chain(T n) {
         chains.push_back({});
         return add(n);
@@ -65,7 +70,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     int n = atoi(argv[1]);
-    collatz::Sequences<int> seq;
+    collatz::Sequences<int> seq(n);
     for (int i = 1; i < n; ++i) {
         collatz::sequence(i, seq);
     }
