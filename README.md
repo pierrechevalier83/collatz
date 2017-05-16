@@ -23,5 +23,7 @@ Current performance
 
 Measuring the time to evaluate go throught the first ten million:
 ```
-./collatz 10000000  7.32s user 0.16s system 99% cpu 7.475 total
+time ./collatz 10000000
+100%
+./collatz 10000000  3.96s user 0.79s system 99% cpu 4.750 total
 ```
