@@ -58,6 +58,7 @@ void sequence(T n, Sequences<T> &seq) {
     bool done = seq.add_chain(n);
     while (!done) {
         n = next(n);
+        // If n < start, no need to look in the hash_table, I know it converges to 1 as I went through it before
         done = n < start || seq.add(n);
     }
 }
@@ -72,7 +73,9 @@ int main(int argc, char *argv[]) {
     }
     int n = atoi(argv[1]);
     collatz::Sequences<int> seq(n);
-    for (int i = 1; i < n; ++i) {
+    // I can easily prove that all even numbers will converge to 1.
+    // Avoid wasting effort!
+    for (int i = 1; i < n; i += 2) {
         collatz::sequence(i, seq);
     }
     seq.print_all();
